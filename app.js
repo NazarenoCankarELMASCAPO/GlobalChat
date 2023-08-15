@@ -6,13 +6,14 @@ const fs = require('fs')
 
 const path = require('path')
 const routesDir = path.join(__dirname, 'routes')
+const publicPath = path.join(__dirname, 'public')
+app.use(express.static(publicPath))
 
 fs.readdirSync(routesDir).forEach(file => {
   const filePath = path.join(routesDir, file)
-  const route = require(filePath)
-
-  const routeName = path.basename(file, '.js')
-  app.use(`/${routeName}`, route)
+  
+  const createRoute = require(filePath)
+  app.use(`/${createRoute.routeName}`, createRoute(publicPath))
 })
 
 app.listen(port, () => console.log("Running at:", port))

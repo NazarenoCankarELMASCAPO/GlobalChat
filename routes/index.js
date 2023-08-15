@@ -1,8 +1,14 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const path = require('path')
+const router = express.Router()
 
-router.get('/', (req, res) => {
-  res.send('Página de inicio');
-});
-
-module.exports = router;
+module.exports = (publicPath) => {
+  const routeName = path.basename(__filename, '.js')
+  
+  router.get('/', (req, res) => {
+    const filePath = path.join(publicPath, 'index.html')
+    res.sendFile(filePath)
+  })
+  
+  return router
+}
